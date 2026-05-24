@@ -227,28 +227,43 @@ function importInventory() {
   } catch(e) { /* not JSON */ }
 
   // Try Inara plain-text format if JSON didn't work
+  // Inara copy/paste uses tabs: " \tRAW\tNEED\tHAVE\t " for headers
+  // and "icon\tName\t-\tCount\t" for data rows
   if (count === 0) {
     const matSections = new Set(['RAW','MANUFACTURED','ENCODED']);
-    const skipSections = new Set(['CHEMICALS','CIRCUITS','TECH','COMPONENTS','SHIP LOCKER','SHIP CARGO',
-      'COMPONENT ITEMS','COMPONENT DATA','MATERIAL']);
+    const stopSections = new Set(['CHEMICALS','CIRCUITS','TECH','COMPONENTS',
+      'SHIP LOCKER','SHIP CARGO','COMPONENT ITEMS','COMPONENT DATA','MATERIAL',
+      'CHEMICALS NEED HAVE','CIRCUITS NEED HAVE','TECH NEED HAVE']);
     let inSection = false;
     raw.split('\n').forEach(function(line) {
       const t = line.trim();
-      // Strip leading non-letter chars (Inara icons)
-      const cleaned = t.replace(/^[^A-Za-z]+/, '').trim();
-      const upper = cleaned.toUpperCase();
-      if (matSections.has(upper)) { inSection = true; return; }
-      if (skipSections.has(upper) || upper === '') { inSection = false; return; }
+      // Split on tabs to handle Inara's tab-delimited format
+      const cols = t.split('\t').map(function(c){ return c.trim(); }).filter(function(c){ return c !== ''; });
+      if (!cols.length) return;
+      // Section header detection: first non-empty col is RAW/MANUFACTURED/ENCODED
+      // Inara format: " RAW NEED HAVE " with tabs
+      const firstWord = cols[0].replace(/^[^A-Za-z]+/, '').toUpperCase();
+      if (matSections.has(firstWord)) { inSection = true; return; }
+      // Stop on non-material sections or summary rows
+      if (stopSections.has(firstWord) || /^\d+$/.test(firstWord)) { inSection = false; return; }
+      // Also stop if line looks like "MATERIAL 557" summary
+      if (firstWord === 'MATERIAL' && cols.length >= 2 && /^\d+$/.test(cols[cols.length-1])) {
+        inSection = false; return;
+      }
       if (!inSection) return;
-      // Match "Material Name   -   12" (Inara format, dash may be em/en/hyphen)
-      const dash = cleaned.search(/\s+[-\u2013\u2014]\s+/);
-      if (dash === -1) return;
-      const name = cleaned.substring(0, dash).trim();
-      const rest = cleaned.substring(dash).replace(/^\s*[-\u2013\u2014]\s*/, '');
-      const qty = parseInt(rest, 10);
+      // Data row: strip icon from first col, name is next, then "-", then count
+      // cols may be: ["︎", "Antimony", "-", "1"] or ["Antimony", "-", "1"]
+      let name = '', qty = NaN;
+      // Find the "-" separator column
+      const dashIdx = cols.indexOf('-');
+      if (dashIdx > 0 && dashIdx < cols.length - 1) {
+        // Everything before the dash (excluding icon col) is the name
+        const nameParts = cols.slice(0, dashIdx).map(function(c){ return c.replace(/^[^A-Za-z]+/,'').trim(); }).filter(Boolean);
+        name = nameParts.join(' ').trim();
+        qty = parseInt(cols[dashIdx + 1], 10);
+      }
       if (!name || isNaN(qty)) return;
-      // Skip header rows
-      if (name.toUpperCase() === 'MATERIAL' || name.toUpperCase() === 'NAME') return;
+      if (name.toUpperCase() === 'NEED' || name.toUpperCase() === 'HAVE') return;
       const k = name.toLowerCase().replace(/[^a-z]/g,'');
       if (k.length > 2) { newInv[k] = qty; count++; }
     });
