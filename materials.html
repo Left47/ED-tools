@@ -20,16 +20,15 @@ h1{font-family:'Orbitron',sans-serif;font-size:clamp(12px,3vw,20px);font-weight:
 .sub{font-size:10px;color:var(--dim);letter-spacing:1px;}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:14px;}
 .ptitle{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
-.ptitle-actions{display:flex;gap:8px;}
 label{display:block;font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
 input,textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:12px;padding:7px 9px;outline:none;transition:border-color 0.2s;}
 input:focus,textarea:focus{border-color:var(--orange);box-shadow:0 0 8px var(--oglow);}
-textarea{resize:vertical;min-height:80px;font-size:11px;}
+textarea{resize:vertical;min-height:80px;}
 button{background:var(--orange);color:#000;border:none;border-radius:3px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:7px 14px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;white-space:nowrap;}
 button:hover{background:#ff8c33;box-shadow:0 0 14px var(--oglow);}
 button:disabled{background:var(--dim);cursor:not-allowed;}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--dim);font-size:9px;}
-.btn-ghost:hover{border-color:var(--orange);color:var(--orange);box-shadow:none;background:transparent;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--dim);}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);background:transparent;box-shadow:none;}
 .btn-green{background:var(--green);color:#000;}
 .btn-green:hover{background:#33ff8c;}
 .controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;}
@@ -44,10 +43,7 @@ button:disabled{background:var(--dim);cursor:not-allowed;}
 .badge.active.mfg{background:var(--mfg);color:#000;}
 .status{font-size:10px;color:var(--dim);margin:10px 0;min-height:14px;letter-spacing:1px;}
 .status.loading{color:var(--teal);}.status.error{color:var(--red);}.status.ok{color:var(--green);}
-
-/* Needs grid */
 .needs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
-.needs-group{}
 .ng-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid;}
 .ng-title.enc{color:var(--enc);border-color:rgba(0,229,204,0.2);}
 .ng-title.mfg{color:var(--mfg);border-color:rgba(167,139,250,0.2);}
@@ -62,8 +58,6 @@ button:disabled{background:var(--dim);cursor:not-allowed;}
 .ni-bar-fill{height:100%;border-radius:2px;transition:width 0.3s;}
 .inv-note{font-size:10px;color:var(--dim);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
 .inv-note a{color:var(--teal);text-decoration:none;}
-
-/* Results */
 .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:14px;}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:12px 12px 12px 15px;position:relative;overflow:hidden;transition:all 0.2s;}
 .card:hover{border-color:rgba(255,106,0,0.5);box-shadow:0 0 14px var(--oglow);}
@@ -89,8 +83,6 @@ button:disabled{background:var(--dim);cursor:not-allowed;}
 .stag.mfg{background:rgba(167,139,250,0.15);color:var(--mfg);}
 .sdist{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--orange);min-width:55px;text-align:right;padding-top:2px;}
 .empty{text-align:center;padding:30px;color:var(--dim);font-size:11px;letter-spacing:1px;grid-column:1/-1;}
-
-/* Import modal */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;}
@@ -100,7 +92,6 @@ button:disabled{background:var(--dim);cursor:not-allowed;}
 .modal-step p{font-size:11px;color:var(--text);margin-bottom:8px;line-height:1.6;}
 .modal-step code{background:var(--bg3);padding:2px 6px;border-radius:2px;font-size:10px;color:var(--teal);}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
-
 footer{font-size:9px;color:var(--dim);text-align:center;padding-top:12px;border-top:1px solid var(--border);letter-spacing:1px;}
 </style>
 </head>
@@ -111,20 +102,18 @@ footer{font-size:9px;color:var(--dim);text-align:center;padding-top:12px;border-
   <span class="sub">CMDR LEFT47 // WOT FLEET</span>
 </header>
 
-<!-- Engineering Needs + Inventory -->
 <div class="panel">
   <div class="ptitle">
     Engineering Needs
-    <div class="ptitle-actions">
-      <button class="btn-ghost" onclick="openImport()">⬆ Import Inventory</button>
-      <button class="btn-ghost" onclick="clearInventory()">✕ Clear</button>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-ghost" onclick="openImport()">Import Inventory</button>
+      <button class="btn-ghost" onclick="clearInventory()">Clear</button>
     </div>
   </div>
   <div class="needs-grid" id="needsGrid"></div>
-  <div class="inv-note" id="invNote">No inventory loaded — showing needed totals only. <a href="#" onclick="openImport();return false;">Import from EDMC journal</a> to see what you still need.</div>
+  <div class="inv-note" id="invNote">No inventory loaded. <a href="#" onclick="openImport();return false;">Import from Inara</a> to see what you still need.</div>
 </div>
 
-<!-- Search -->
 <div class="panel">
   <div class="controls">
     <div><label>Current System</label><input id="system" value="Deciat" placeholder="e.g. Deciat"/></div>
@@ -144,17 +133,16 @@ footer{font-size:9px;color:var(--dim);text-align:center;padding-top:12px;border-
 
 <footer>Data via Spansh.co.uk · Updated from EDDN live feed</footer>
 
-<!-- Import Modal -->
 <div class="modal-overlay" id="importModal">
   <div class="modal">
     <h2>Import Inventory</h2>
     <div class="modal-step">
-      <p>On any device, go to your <a href="https://inara.cz/elite/cmdr-inventory/526761/" target="_blank" style="color:var(--teal)">Inara inventory page</a>, select all the text (Ctrl+A / Select All), copy, and paste below. Works on iPad Safari too.</p>
-      <p style="margin-top:6px">Also accepts EDMC journal JSON: <code>{ "Raw":[...], "Manufactured":[...], "Encoded":[...] }</code></p>
+      <p>Go to your <a href="https://inara.cz/elite/cmdr-inventory/526761/" target="_blank" style="color:var(--teal)">Inara inventory page</a>, select all the text on the page (Ctrl+A or tap and hold, Select All), copy, and paste below. Works on iPad Safari.</p>
+      <p style="margin-top:6px">Also accepts EDMC journal JSON format.</p>
     </div>
     <div class="modal-step">
       <label>Paste Inara page text or EDMC JSON</label>
-      <textarea id="importText" placeholder="Paste Inara inventory page text or EDMC JSON here..."></textarea>
+      <textarea id="importText" placeholder="Paste here..."></textarea>
       <div class="status" id="importStatus"></div>
     </div>
     <div class="modal-actions">
@@ -165,36 +153,33 @@ footer{font-size:9px;color:var(--dim);text-align:center;padding-top:12px;border-
 </div>
 
 <script>
-// ── Engineering needs definition ──────────────────────────────────────────────
 const NEEDS = [
-  { group: 'enc', label: 'Encoded — FSD Experimental ×2 ships', items: [
-    { name: 'Atypical Disrupted Wake Echoes',    key: 'atypicaldisruptedwakeechoes',    need: 10 },
-    { name: 'Eccentric Hyperspace Trajectories', key: 'eccentrichyperspacetrajectoris',  need: 6  },
-    { name: 'Strange Wake Solutions',            key: 'strangewakesolutions',            need: 2  },
+  { group: 'enc', label: 'Encoded - FSD Experimental x2 ships', items: [
+    { name: 'Atypical Disrupted Wake Echoes',    key: 'atypicaldisruptedwakeechoes',   need: 10 },
+    { name: 'Eccentric Hyperspace Trajectories', key: 'eccentrichyperspacetrajectoris', need: 6  },
+    { name: 'Strange Wake Solutions',            key: 'strangewakesolutions',           need: 2  },
   ]},
-  { group: 'mfg', label: 'Manufactured — PD Charge Enhanced G5 ×4 ships', items: [
+  { group: 'mfg', label: 'Manufactured - PD Charge Enhanced G5 x4 ships', items: [
     { name: 'Modified Consumer Firmware',  key: 'modifiedconsumerfirmware',  need: 5 },
     { name: 'Cracked Industrial Firmware', key: 'crackedindustrialfirmware', need: 5 },
     { name: 'Security Firmware Patch',     key: 'securityfirmwarepatch',     need: 3 },
     { name: 'Proprietary Composites',      key: 'proprietarycomposites',     need: 5 },
     { name: 'Core Dynamics Composites',    key: 'coredynamicscomposites',    need: 3 },
   ]},
-  { group: 'mfg', label: 'Manufactured — FSD G5 Re-engineer ×2 ships', items: [
-    { name: 'Proto Light Alloys',      key: 'protolightalloys',      need: 5 },
-    { name: 'Proto Radiolic Alloys',   key: 'protoradioalloys',      need: 3 },
+  { group: 'mfg', label: 'Manufactured - FSD G5 Re-engineer x2 ships', items: [
+    { name: 'Proto Light Alloys',        key: 'protolightalloys',        need: 5 },
+    { name: 'Proto Radiolic Alloys',     key: 'protoradioalloys',        need: 3 },
     { name: 'Datamined Wake Exceptions', key: 'dataminedwakeexceptions', need: 5 },
   ]},
 ];
 
-// ── State ─────────────────────────────────────────────────────────────────────
 const T = { enc:'Encoded', raw:'Raw', mfg:'Manufactured' };
 let active = new Set(['enc','raw','mfg']);
 let all = [];
-let inventory = {}; // key -> count
+let inventory = {};
 
-// ── Inventory ─────────────────────────────────────────────────────────────────
 function loadInventory() {
-  try { inventory = JSON.parse(localStorage.getItem('ed_inv') || '{}'); } catch { inventory = {}; }
+  try { inventory = JSON.parse(localStorage.getItem('ed_inv') || '{}'); } catch(e) { inventory = {}; }
 }
 
 function saveInventory() {
@@ -205,7 +190,7 @@ function clearInventory() {
   inventory = {};
   saveInventory();
   renderNeeds();
-  document.getElementById('invNote').innerHTML = 'Inventory cleared. <a href="#" onclick="openImport();return false;">Import from EDMC journal</a> to load your materials.';
+  document.getElementById('invNote').innerHTML = 'Inventory cleared. <a href="#" onclick="openImport();return false;">Import from Inara</a> to reload.';
 }
 
 function openImport() {
@@ -224,67 +209,53 @@ function importInventory() {
   const newInv = {};
   let count = 0;
 
-  // ── Try JSON first (EDMC format) ──────────────────────────────────────────
-  let isJson = false;
+  // Try JSON first (EDMC format)
   try {
     const parsed = JSON.parse(raw);
-    const sections = (parsed.Raw || parsed.raw || parsed.Manufactured || parsed.Encoded)
-      ? parsed
-      : (parsed.Materials || parsed.materials || parsed);
-    const types = ['Raw','Manufactured','Encoded','raw','manufactured','encoded'];
-    types.forEach(type => {
+    const sections = (parsed.Raw || parsed.Manufactured || parsed.Encoded) ? parsed
+      : (parsed.Materials || parsed);
+    ['Raw','Manufactured','Encoded','raw','manufactured','encoded'].forEach(function(type) {
       const arr = sections[type] || sections[type.toLowerCase()];
       if (Array.isArray(arr)) {
-        arr.forEach(item => {
+        arr.forEach(function(item) {
           const k = (item.Name || item.name || '').toLowerCase().replace(/[^a-z]/g,'');
           const v = item.Count || item.count || 0;
           if (k) { newInv[k] = v; count++; }
         });
       }
     });
-    if (count > 0) isJson = true;
-  } catch(e) { /* not JSON, try plain text */ }
+  } catch(e) { /* not JSON */ }
 
-  // ── Try Inara plain-text copy/paste format ────────────────────────────────
-  // Format has lines like: "Carbon  -  0" or "Atypical Disrupted Wake Echoes  -  13"
-  // Section headers are: RAW, MANUFACTURED, ENCODED (all caps)
-  if (!isJson) {
-    const lines = raw.split(/
-/);
-    const sectionHeaders = new Set(['RAW','MANUFACTURED','ENCODED','CHEMICALS','CIRCUITS','TECH','COMPONENTS','SHIP LOCKER','SHIP CARGO']);
-    let inMaterials = false;
-
-    lines.forEach(line => {
-      const trimmed = line.trim();
-
-      // Detect section headers — only care about materials sections
-      const upper = trimmed.toUpperCase();
-      if (sectionHeaders.has(upper)) {
-        inMaterials = ['RAW','MANUFACTURED','ENCODED'].includes(upper);
-        return;
-      }
-
-      if (!inMaterials) return;
-
-      // Match lines like "Carbon  -  0" or "Atypical Disrupted Wake Echoes  -  13"
-      // Inara uses em-dash or hyphen, with variable spacing
-      const m = trimmed.match(/^(.+?)\s+[-–—]\s+(\d+)\s*$/);
-      if (m) {
-        const name = m[1].trim();
-        const qty = parseInt(m[2], 10);
-        // Skip header row "MATERIAL  NEED  HAVE"
-        if (name.toUpperCase() === 'MATERIAL' || name.toUpperCase() === 'NAME') return;
-        // Skip rows with emoji/icons at start (Inara adds ︎ icons)
-        const cleanName = name.replace(/^[^\w]+/, '').trim();
-        if (!cleanName) return;
-        const k = cleanName.toLowerCase().replace(/[^a-z]/g,'');
-        if (k.length > 2) { newInv[k] = qty; count++; }
-      }
+  // Try Inara plain-text format if JSON didn't work
+  if (count === 0) {
+    const matSections = new Set(['RAW','MANUFACTURED','ENCODED']);
+    const skipSections = new Set(['CHEMICALS','CIRCUITS','TECH','COMPONENTS','SHIP LOCKER','SHIP CARGO',
+      'COMPONENT ITEMS','COMPONENT DATA','MATERIAL']);
+    let inSection = false;
+    raw.split('\n').forEach(function(line) {
+      const t = line.trim();
+      // Strip leading non-letter chars (Inara icons)
+      const cleaned = t.replace(/^[^A-Za-z]+/, '').trim();
+      const upper = cleaned.toUpperCase();
+      if (matSections.has(upper)) { inSection = true; return; }
+      if (skipSections.has(upper) || upper === '') { inSection = false; return; }
+      if (!inSection) return;
+      // Match "Material Name   -   12" (Inara format, dash may be em/en/hyphen)
+      const dash = cleaned.search(/\s+[-\u2013\u2014]\s+/);
+      if (dash === -1) return;
+      const name = cleaned.substring(0, dash).trim();
+      const rest = cleaned.substring(dash).replace(/^\s*[-\u2013\u2014]\s*/, '');
+      const qty = parseInt(rest, 10);
+      if (!name || isNaN(qty)) return;
+      // Skip header rows
+      if (name.toUpperCase() === 'MATERIAL' || name.toUpperCase() === 'NAME') return;
+      const k = name.toLowerCase().replace(/[^a-z]/g,'');
+      if (k.length > 2) { newInv[k] = qty; count++; }
     });
   }
 
   if (count === 0) {
-    ist.textContent = 'No materials found — try selecting all text on the Inara inventory page and pasting again.';
+    ist.textContent = 'No materials found. Try selecting all text on the Inara inventory page and pasting again.';
     ist.className = 'status error';
     return;
   }
@@ -292,24 +263,19 @@ function importInventory() {
   inventory = newInv;
   saveInventory();
   renderNeeds();
-  ist.textContent = `Loaded ${count} materials.`;
+  ist.textContent = 'Loaded ' + count + ' materials.';
   ist.className = 'status ok';
-  setTimeout(() => {
-    closeImport();
-    updateBadgesFromNeeds();
-  }, 800);
+  setTimeout(function() { closeImport(); updateBadgesFromNeeds(); }, 900);
 }
 
 function getShort(item) {
-  const have = inventory[item.key] || 0;
-  return Math.max(0, item.need - have);
+  return Math.max(0, item.need - (inventory[item.key] || 0));
 }
 
 function typesNeeded() {
   const needed = new Set();
-  NEEDS.forEach(g => {
-    const anyShort = g.items.some(i => getShort(i) > 0);
-    if (anyShort) needed.add(g.group);
+  NEEDS.forEach(function(g) {
+    if (g.items.some(function(i) { return getShort(i) > 0; })) needed.add(g.group);
   });
   return needed;
 }
@@ -317,63 +283,49 @@ function typesNeeded() {
 function updateBadgesFromNeeds() {
   if (Object.keys(inventory).length === 0) return;
   const needed = typesNeeded();
-  document.querySelectorAll('.badge').forEach(el => {
+  document.querySelectorAll('.badge').forEach(function(el) {
     const t = el.dataset.t;
-    if (needed.has(t)) {
-      active.add(t);
-      el.classList.add('active');
-    } else {
-      active.delete(t);
-      el.classList.remove('active');
-    }
+    if (needed.has(t)) { active.add(t); el.classList.add('active'); }
+    else { active.delete(t); el.classList.remove('active'); }
   });
   if (active.size === 0) {
-    // Nothing needed — keep all active
-    document.querySelectorAll('.badge').forEach(el => {
-      active.add(el.dataset.t);
-      el.classList.add('active');
+    document.querySelectorAll('.badge').forEach(function(el) {
+      active.add(el.dataset.t); el.classList.add('active');
     });
   }
 }
 
-// ── Render needs panel ────────────────────────────────────────────────────────
 function renderNeeds() {
   const hasInv = Object.keys(inventory).length > 0;
-  const grid = document.getElementById('needsGrid');
-
-  grid.innerHTML = NEEDS.map(g => {
-    const rows = g.items.map(item => {
+  document.getElementById('needsGrid').innerHTML = NEEDS.map(function(g) {
+    const rows = g.items.map(function(item) {
       const have = inventory[item.key] || 0;
       const short = getShort(item);
       const pct = Math.min(100, Math.round((have / item.need) * 100));
-      const barColor = short === 0 ? 'var(--green)' : (pct > 50 ? 'var(--teal)' : 'var(--orange)');
+      const barCol = short === 0 ? 'var(--green)' : (pct > 50 ? 'var(--teal)' : 'var(--orange)');
       const haveClass = short === 0 ? 'ni-have enough' : 'ni-have';
-      return `<div class="ni">
-        <span class="ni-name" title="${item.name}">${item.name}</span>
-        <div class="ni-counts">
-          ${hasInv ? `<span class="${haveClass}">${have}</span><span class="ni-dim">/</span>` : ''}
-          <span class="ni-need">${item.need}</span>
-          ${hasInv && short > 0 ? `<span class="ni-short">-${short}</span>` : ''}
-          ${hasInv && short === 0 ? `<span style="color:var(--green);font-size:10px">✓</span>` : ''}
-        </div>
-        ${hasInv ? `<div class="ni-bar"><div class="ni-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>` : ''}
-      </div>`;
+      return '<div class="ni">' +
+        '<span class="ni-name" title="' + item.name + '">' + item.name + '</span>' +
+        '<div class="ni-counts">' +
+        (hasInv ? '<span class="' + haveClass + '">' + have + '</span><span style="color:var(--dim)">/</span>' : '') +
+        '<span class="ni-need">' + item.need + '</span>' +
+        (hasInv && short > 0 ? '<span class="ni-short">-' + short + '</span>' : '') +
+        (hasInv && short === 0 ? '<span style="color:var(--green);font-size:10px">OK</span>' : '') +
+        '</div>' +
+        (hasInv ? '<div class="ni-bar"><div class="ni-bar-fill" style="width:' + pct + '%;background:' + barCol + '"></div></div>' : '') +
+        '</div>';
     }).join('');
-    return `<div class="needs-group">
-      <div class="ng-title ${g.group}">${g.label}</div>
-      ${rows}
-    </div>`;
+    return '<div><div class="ng-title ' + g.group + '">' + g.label + '</div>' + rows + '</div>';
   }).join('');
 
   if (hasInv) {
-    const allDone = NEEDS.every(g => g.items.every(i => getShort(i) === 0));
+    const allDone = NEEDS.every(function(g) { return g.items.every(function(i) { return getShort(i) === 0; }); });
     document.getElementById('invNote').innerHTML = allDone
-      ? '<span style="color:var(--green)">✓ All materials collected — nothing left to trade for!</span>'
-      : `Inventory loaded from EDMC. <a href="#" onclick="openImport();return false;">Re-import</a> after your next session.`;
+      ? '<span style="color:var(--green)">All materials collected!</span>'
+      : 'Inventory loaded. <a href="#" onclick="openImport();return false;">Re-import</a> after your next session.';
   }
 }
 
-// ── Toggle badges ─────────────────────────────────────────────────────────────
 function tog(el) {
   const t = el.dataset.t;
   if (active.has(t)) { if (active.size === 1) return; active.delete(t); el.classList.remove('active'); }
@@ -381,13 +333,11 @@ function tog(el) {
   render();
 }
 
-// ── Status ────────────────────────────────────────────────────────────────────
-function st(m, c='') {
+function st(m, c) {
   const e = document.getElementById('st');
-  e.textContent = m; e.className = 'status ' + c;
+  e.textContent = m; e.className = 'status ' + (c || '');
 }
 
-// ── Spansh API ────────────────────────────────────────────────────────────────
 const PROXY = 'https://spansh.jamesthomas3.workers.dev';
 
 async function getCoords(system) {
@@ -397,22 +347,21 @@ async function getCoords(system) {
   });
   if (!r.ok) throw new Error('System lookup failed');
   const d = await r.json();
-  const s = (d.results||[])[0];
+  const s = (d.results || [])[0];
   if (!s) throw new Error('System not found: ' + system);
   return { x:s.x, y:s.y, z:s.z };
 }
 
 async function fetchTraders(coords, type, radius) {
-  const body = {
-    filters:{ services:{value:["Material Trader"]}, material_trader:{value:[type]} },
-    sort:[{distance:{direction:"asc"}}], size:5, page:0, reference_coords:coords
-  };
   const r = await fetch(PROXY + '/api/stations/search', {
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      filters:{ services:{value:['Material Trader']}, material_trader:{value:[type]} },
+      sort:[{distance:{direction:'asc'}}], size:5, page:0, reference_coords:coords
+    })
   });
   if (!r.ok) throw new Error('HTTP ' + r.status);
-  const d = await r.json();
-  return d.results || [];
+  return (await r.json()).results || [];
 }
 
 async function doSearch() {
@@ -424,34 +373,32 @@ async function doSearch() {
   document.getElementById('cards').innerHTML = '';
   document.getElementById('rw').style.display = 'none';
 
-  // Figure out which types are actually needed
   const needed = Object.keys(inventory).length > 0 ? typesNeeded() : active;
-  const searchTypes = [...active].filter(t => needed.has(t));
+  const searchTypes = [...active].filter(function(t) { return needed.has(t); });
 
   if (searchTypes.length === 0) {
-    st('All needed materials already collected — nothing to search for!', 'ok');
-    btn.disabled = false;
-    return;
+    st('All needed materials already collected!','ok');
+    btn.disabled = false; return;
   }
 
   try {
     const radius = Math.round(jr * 3);
     st('Resolving system coordinates...','loading');
     const coords = await getCoords(sys);
-    st('Querying Spansh for ' + searchTypes.map(t=>T[t]).join(', ') + ' traders...','loading');
-
-    const typeMap = { enc:'Encoded', raw:'Raw', mfg:'Manufactured' };
+    st('Querying Spansh for ' + searchTypes.map(function(t){return T[t];}).join(', ') + ' traders...','loading');
     const results = await Promise.all(
-      searchTypes.map(t => fetchTraders(coords, typeMap[t], radius).then(r => r.map(s => ({...s, t}))))
+      searchTypes.map(function(t) {
+        return fetchTraders(coords, T[t], radius).then(function(r) {
+          return r.map(function(s) { return Object.assign({}, s, {t:t}); });
+        });
+      })
     );
-    all = results.flat();
-
+    all = [].concat.apply([], results);
     if (!all.length) {
-      st(`No traders within ${radius} ly of ${sys} — try larger jump range.`,'error');
+      st('No traders within ' + radius + ' ly of ' + sys + ' -- try larger jump range.','error');
       document.getElementById('cards').innerHTML = '<div class="empty">No results found.</div>';
     } else {
-      const counts = searchTypes.map(t => `${results[searchTypes.indexOf(t)].length} ${T[t].toLowerCase()}`).join(' · ');
-      st(`Found ${counts} traders near ${sys}`);
+      st('Found ' + all.length + ' traders near ' + sys);
       render(); buildRoute(jr);
     }
   } catch(e) {
@@ -459,56 +406,51 @@ async function doSearch() {
   } finally { btn.disabled = false; }
 }
 
-// ── Render results ────────────────────────────────────────────────────────────
 function render() {
   const el = document.getElementById('cards');
-  const items = all.filter(s => active.has(s.t)).sort((a,b)=>(a.distance||0)-(b.distance||0));
+  const items = all.filter(function(s){return active.has(s.t);}).sort(function(a,b){return (a.distance||0)-(b.distance||0);});
   if (!items.length) { el.innerHTML = '<div class="empty">No results for selected types.</div>'; return; }
-  el.innerHTML = items.map(s => `
-    <div class="card ${s.t}">
-      <div class="dist">${s.distance?s.distance.toFixed(1):'?'}<small>ly</small></div>
-      <div class="ctype">${T[s.t]} Trader</div>
-      <div class="csys">${s.system_name||'?'}</div>
-      <div class="cstn">${s.name||'?'}</div>
-      <div class="cmeta">
-        <span>⚓ ${s.distance_to_arrival?Math.round(s.distance_to_arrival).toLocaleString()+'ls':'?'}</span>
-        <span>▣ ${s.max_landing_pad_size||'?'}</span>
-        <span>⟳ ${s.updated_at?new Date(s.updated_at).toLocaleDateString():'?'}</span>
-      </div>
-    </div>`).join('');
-}
-
-// ── Build route ───────────────────────────────────────────────────────────────
-function buildRoute(jr) {
-  const m = {};
-  all.forEach(s => {
-    if (!m[s.system_name]) m[s.system_name]={sys:s.system_name,dist:s.distance||999,stations:[]};
-    m[s.system_name].stations.push(s);
-  });
-  const sc = Object.values(m).filter(s=>s.dist<=jr*4)
-    .map(s=>{const ty=new Set(s.stations.map(x=>x.t));return{...s,ty,score:ty.size*10-s.dist*0.1};})
-    .sort((a,b)=>b.score-a.score).slice(0,5);
-  if (!sc.length) return;
-  document.getElementById('rw').style.display='block';
-  document.getElementById('rv').innerHTML = sc.map((s,i)=>{
-    const tags=[...s.ty].map(t=>`<span class="stag ${t}">${T[t]}</span>`).join('');
-    const best=[...s.ty].map(t=>{
-      const x=s.stations.filter(q=>q.t===t).sort((a,b)=>(a.distance_to_arrival||99999)-(b.distance_to_arrival||99999))[0];
-      return x?x.name:null;
-    }).filter(Boolean);
-    return `<div class="rstop">
-      <div class="snum">${String(i+1).padStart(2,'0')}</div>
-      <div class="sbody">
-        <div class="ssys">${s.sys}</div>
-        <div class="sstn">${best[0]||'?'}${best.length>1?' (+'+(best.length-1)+' more)':''}</div>
-        <div class="stags">${tags}</div>
-      </div>
-      <div class="sdist">${s.dist.toFixed(1)} ly</div>
-    </div>`;
+  el.innerHTML = items.map(function(s) {
+    return '<div class="card ' + s.t + '">' +
+      '<div class="dist">' + (s.distance?s.distance.toFixed(1):'?') + '<small>ly</small></div>' +
+      '<div class="ctype">' + T[s.t] + ' Trader</div>' +
+      '<div class="csys">' + (s.system_name||'?') + '</div>' +
+      '<div class="cstn">' + (s.name||'?') + '</div>' +
+      '<div class="cmeta">' +
+      '<span>anchor ' + (s.distance_to_arrival?Math.round(s.distance_to_arrival).toLocaleString()+'ls':'?') + '</span>' +
+      '<span>pad ' + (s.max_landing_pad_size||'?') + '</span>' +
+      '<span>' + (s.updated_at?new Date(s.updated_at).toLocaleDateString():'?') + '</span>' +
+      '</div></div>';
   }).join('');
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+function buildRoute(jr) {
+  const m = {};
+  all.forEach(function(s) {
+    if (!m[s.system_name]) m[s.system_name]={sys:s.system_name,dist:s.distance||999,stations:[]};
+    m[s.system_name].stations.push(s);
+  });
+  const sc = Object.values(m).filter(function(s){return s.dist<=jr*4;})
+    .map(function(s){const ty=new Set(s.stations.map(function(x){return x.t;}));return Object.assign({},s,{ty:ty,score:ty.size*10-s.dist*0.1});})
+    .sort(function(a,b){return b.score-a.score;}).slice(0,5);
+  if (!sc.length) return;
+  document.getElementById('rw').style.display='block';
+  document.getElementById('rv').innerHTML = sc.map(function(s,i) {
+    const tags=[...s.ty].map(function(t){return '<span class="stag '+t+'">'+T[t]+'</span>';}).join('');
+    const best=[...s.ty].map(function(t){
+      const x=s.stations.filter(function(q){return q.t===t;}).sort(function(a,b){return (a.distance_to_arrival||99999)-(b.distance_to_arrival||99999);})[0];
+      return x?x.name:null;
+    }).filter(Boolean);
+    return '<div class="rstop">' +
+      '<div class="snum">' + String(i+1).padStart(2,'0') + '</div>' +
+      '<div class="sbody">' +
+      '<div class="ssys">' + s.sys + '</div>' +
+      '<div class="sstn">' + (best[0]||'?') + (best.length>1?' (+'+(best.length-1)+' more)':'') + '</div>' +
+      '<div class="stags">' + tags + '</div></div>' +
+      '<div class="sdist">' + s.dist.toFixed(1) + ' ly</div></div>';
+  }).join('');
+}
+
 loadInventory();
 renderNeeds();
 if (Object.keys(inventory).length > 0) updateBadgesFromNeeds();
