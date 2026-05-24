@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+  :root {
+    --orange:#ff6a00;--orange-glow:rgba(255,106,0,0.25);--teal:#00e5cc;
+    --bg:#050a0f;--bg2:#0a1520;--bg3:#0f1e2e;--text:#c8dde8;--text-dim:#5a7a8a;
+    --border:rgba(255,106,0,0.2);--encoded:#00e5cc;--raw:#ff6a00;--manu:#a78bfa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;padding:16px;background-image:radial-gradient(ellipse at 20% 20%,rgba(255,106,0,0.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,229,204,0.04) 0%,transparent 60%);}
+  header{border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  h1{font-family:'Orbitron',sans-serif;font-size:clamp(12px,3vw,20px);font-weight:900;color:var(--orange);text-shadow:0 0 20px var(--orange-glow);letter-spacing:2px;}
+  .sub{font-size:10px;color:var(--text-dim);letter-spacing:1px;}
+  .panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:14px;}
+  .ptitle{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:12px;}
+  .mats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .mgt{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid;}
+  .mgt.enc{color:var(--encoded);border-color:rgba(0,229,204,0.2);}
+  .mgt.mfg{color:var(--manu);border-color:rgba(167,139,250,0.2);}
+  .mi{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;}
+  .mq{color:var(--teal);}
+  .controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;}
+  @media(max-width:500px){.controls{grid-template-columns:1fr;}}
+  label{display:block;font-size:9px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+  input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:13px;padding:7px 9px;outline:none;transition:border-color 0.2s;}
+  input:focus{border-color:var(--orange);box-shadow:0 0 8px var(--orange-glow);}
+  button{background:var(--orange);color:#000;border:none;border-radius:3px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;padding:9px 18px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;white-space:nowrap;}
+  button:hover{background:#ff8c33;box-shadow:0 0 14px var(--orange-glow);}
+  button:disabled{background:var(--text-dim);cursor:not-allowed;}
+  .badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
+  .badge{padding:4px 11px;border-radius:3px;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid;cursor:pointer;transition:all 0.2s;user-select:none;}
+  .badge.enc{border-color:var(--encoded);color:var(--encoded);}
+  .badge.raw{border-color:var(--raw);color:var(--raw);}
+  .badge.mfg{border-color:var(--manu);color:var(--manu);}
+  .badge.active.enc{background:var(--encoded);color:#000;}
+  .badge.active.raw{background:var(--raw);color:#000;}
+  .badge.active.mfg{background:var(--manu);color:#000;}
+  .status{font-size:10px;color:var(--text-dim);margin:10px 0;min-height:14px;letter-spacing:1px;}
+  .status.loading{color:var(--teal);}.status.error{color:#ff4444;}
+  .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:14px;}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:12px 12px 12px 15px;position:relative;overflow:hidden;transition:all 0.2s;}
+  .card:hover{border-color:rgba(255,106,0,0.5);box-shadow:0 0 14px var(--orange-glow);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+  .card.enc::before{background:var(--encoded);}.card.raw::before{background:var(--raw);}.card.mfg::before{background:var(--manu);}
+  .ctype{font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+  .enc .ctype{color:var(--encoded);}.raw .ctype{color:var(--raw);}.mfg .ctype{color:var(--manu);}
+  .csys{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;}
+  .cstn{font-size:11px;color:var(--teal);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cmeta{display:flex;gap:10px;font-size:9px;color:var(--text-dim);flex-wrap:wrap;}
+  .dist{position:absolute;top:10px;right:10px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--orange);text-align:right;}
+  .dist small{font-size:8px;color:var(--text-dim);display:block;}
+  .rstop{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,106,0,0.1);}
+  .rstop:last-child{border-bottom:none;}
+  .snum{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--text-dim);min-width:22px;padding-top:2px;}
+  .sbody{flex:1;}
+  .ssys{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:#fff;}
+  .sstn{font-size:10px;color:var(--teal);margin:2px 0;}
+  .stags{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px;}
+  .stag{font-size:8px;padding:2px 5px;border-radius:2px;letter-spacing:1px;text-transform:uppercase;}
+  .stag.enc{background:rgba(0,229,204,0.15);color:var(--encoded);}
+  .stag.raw{background:rgba(255,106,0,0.15);color:var(--raw);}
+  .stag.mfg{background:rgba(167,139,250,0.15);color:var(--manu);}
+  .sdist{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--orange);min-width:55px;text-align:right;padding-top:2px;}
+  .empty{text-align:center;padding:30px;color:var(--text-dim);font-size:11px;letter-spacing:1px;grid-column:1/-1;}
+  footer{font-size:9px;color:var(--text-dim);text-align:center;padding-top:12px;border-top:1px solid var(--border);letter-spacing:1px;}
+</style>
+</head>
+<body>
+<header><h1>Materials Route Planner</h1><span class="sub">CMDR LEFT47 // WOT FLEET</span></header>
+<div class="panel">
+  <div class="ptitle">Current Engineering Needs</div>
+  <div class="mats-grid">
+    <div>
+      <div class="mgt enc">Encoded — FSD Experimental ×2</div>
+      <div class="mi"><span>Atypical Disrupted Wake Echoes</span><span class="mq">×10</span></div>
+      <div class="mi"><span>Eccentric Hyperspace Trajectories</span><span class="mq">×6</span></div>
+      <div class="mi"><span>Strange Wake Solutions</span><span class="mq">×2</span></div>
+    </div>
+    <div>
+      <div class="mgt mfg">Manufactured — PD Charge Enhanced G5</div>
+      <div class="mi"><span>Modified Consumer Firmware</span><span class="mq">×5</span></div>
+      <div class="mi"><span>Cracked Industrial Firmware</span><span class="mq">×5</span></div>
+      <div class="mi"><span>Security Firmware Patch</span><span class="mq">×3</span></div>
+      <div class="mi"><span>Proprietary Composites</span><span class="mq">×5</span></div>
+      <div class="mi"><span>Core Dynamics Composites</span><span class="mq">×3</span></div>
+    </div>
+    <div>
+      <div class="mgt mfg">Manufactured — FSD G5 Re-engineer</div>
+      <div class="mi"><span>Proto Light Alloys</span><span class="mq">×5</span></div>
+      <div class="mi"><span>Proto Radiolic Alloys</span><span class="mq">×3</span></div>
+      <div class="mi"><span>Datamined Wake Exceptions</span><span class="mq">×5</span></div>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="controls">
+    <div><label>Current System</label><input id="sys" value="Deciat" placeholder="e.g. Deciat"/></div>
+    <div><label>Jump Range (ly)</label><input id="jr" type="number" value="55" min="5" max="120"/></div>
+    <button id="btn" onclick="go()">Search</button>
+  </div>
+  <div class="badges">
+    <span class="badge enc active" data-t="enc" onclick="tog(this)">Encoded</span>
+    <span class="badge raw active" data-t="raw" onclick="tog(this)">Raw</span>
+    <span class="badge mfg active" data-t="mfg" onclick="tog(this)">Manufactured</span>
+  </div>
+</div>
+<div class="status" id="st"></div>
+<div id="rw" style="display:none" class="panel"><div class="ptitle">Suggested Route</div><div id="rv"></div></div>
+<div class="results" id="cards"><div class="empty">Enter a system and tap Search to find nearby material traders.</div></div>
+<footer>Data via Spansh.co.uk · Updated from EDDN live feed</footer>
+<script>
+const TL={enc:'Encoded',raw:'Raw',mfg:'Manufactured'};
+let active=new Set(['enc','raw','mfg']),all=[];
+function tog(el){const t=el.dataset.t;if(active.has(t)){if(active.size===1)return;active.delete(t);el.classList.remove('active');}else{active.add(t);el.classList.add('active');}draw();}
+function st(m,c=''){const e=document.getElementById('st');e.textContent=m;e.className='status '+c;}
+async function ft(sys,type,r){const u=`https://www.spansh.co.uk/api/stations/search?system=${encodeURIComponent(sys)}&radius=${r}&filters%5Bservices%5D%5Bvalue%5D%5B%5D=Material+Trader&filters%5Bservices%5D%5Bcomparison%5D=has`;const res=await fetch(u);if(!res.ok)throw new Error('HTTP '+res.status);const d=await res.json();return(d.results||[]).filter(s=>s.material_trader&&s.material_trader.toLowerCase().includes(type.toLowerCase())).slice(0,5);}
+async function go(){const sys=document.getElementById('sys').value.trim(),jr=parseFloat(document.getElementById('jr').value)||55;if(!sys){st('Enter a system name.','error');return;}
+const btn=document.getElementById('btn');btn.disabled=true;all=[];st('Querying Spansh...','loading');document.getElementById('cards').innerHTML='';document.getElementById('rw').style.display='none';
+try{const r=Math.round(jr*3);const[enc,raw,mfg]=await Promise.all([ft(sys,'Encoded',r).then(x=>x.map(s=>({...s,t:'enc'}))),ft(sys,'Raw',r).then(x=>x.map(s=>({...s,t:'raw'}))),ft(sys,'Manufactured',r).then(x=>x.map(s=>({...s,t:'mfg'})))]);
+all=[...enc,...raw,...mfg];if(!all.length){st(`No traders within ${r} ly — try larger range.`,'error');document.getElementById('cards').innerHTML='<div class="empty">No results found.</div>';}else{st(`Found ${enc.length} encoded · ${raw.length} raw · ${mfg.length} manufactured near ${sys}`);draw();route(jr);}}catch(e){st('Error: '+e.message,'error');}finally{btn.disabled=false;}}
+function draw(){const el=document.getElementById('cards');const items=all.filter(s=>active.has(s.t)).sort((a,b)=>(a.distance||0)-(b.distance||0));if(!items.length){el.innerHTML='<div class="empty">No results for selected types.</div>';return;}
+el.innerHTML=items.map(s=>`<div class="card ${s.t}"><div class="dist">${s.distance?s.distance.toFixed(1):'?'}<small>ly</small></div><div class="ctype">${TL[s.t]} Trader</div><div class="csys">${s.system_name||'?'}</div><div class="cstn">${s.name||'?'}</div><div class="cmeta"><span>⚓ ${s.distance_to_arrival?Math.round(s.distance_to_arrival).toLocaleString()+'ls':'?'}</span><span>▣ ${s.max_landing_pad_size||'?'}</span><span>⟳ ${s.updated_at?new Date(s.updated_at).toLocaleDateString():'?'}</span></div></div>`).join('');}
+function route(jr){const m={};all.forEach(s=>{if(!m[s.system_name])m[s.system_name]={sys:s.system_name,dist:s.distance||999,stations:[]};m[s.system_name].stations.push(s);});
+const sc=Object.values(m).filter(s=>s.dist<=jr*4).map(s=>{const ty=new Set(s.stations.map(x=>x.t));return{...s,ty,score:ty.size*10-s.dist*0.1};}).sort((a,b)=>b.score-a.score).slice(0,5);
+if(!sc.length)return;document.getElementById('rw').style.display='block';
+document.getElementById('rv').innerHTML=sc.map((s,i)=>{const tags=[...s.ty].map(t=>`<span class="stag ${t}">${TL[t]}</span>`).join('');const best=[...s.ty].map(t=>{const x=s.stations.filter(q=>q.t===t).sort((a,b)=>(a.distance_to_arrival||99999)-(b.distance_to_arrival||99999))[0];return x?x.name:null;}).filter(Boolean);return`<div class="rstop"><div class="snum">${String(i+1).padStart(2,'0')}</div><div class="sbody"><div class="ssys">${s.sys}</div><div class="sstn">${best[0]||'?'}${best.length>1?' (+'+(best.length-1)+' more)':''}</div><div class="stags">${tags}</div></div><div class="sdist">${s.dist.toFixed(1)} ly</div></div>`;}).join('');}
+</script>
+</body>
+</html>
