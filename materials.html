@@ -440,27 +440,55 @@ function render() {
 }
 
 function buildRoute(jr) {
+  // Group all results by system
   const m = {};
   all.forEach(function(s) {
     if (!m[s.system_name]) m[s.system_name]={sys:s.system_name,dist:s.distance||999,stations:[]};
     m[s.system_name].stations.push(s);
   });
-  const sc = Object.values(m).filter(function(s){return s.dist<=jr*4;})
-    .map(function(s){const ty=new Set(s.stations.map(function(x){return x.t;}));return Object.assign({},s,{ty:ty,score:ty.size*10-s.dist*0.1});})
-    .sort(function(a,b){return b.score-a.score;}).slice(0,5);
-  if (!sc.length) return;
+
+  // Build the optimal route: for each trader type needed, pick the best system
+  // A system that covers multiple types gets used once for all of them
+  const typesNeededNow = [...active];
+  const covered = new Set();
+  const route = [];
+
+  // Sort systems by score (multi-type first, then nearest)
+  const ranked = Object.values(m)
+    .filter(function(s){ return s.dist <= jr * 4; })
+    .map(function(s){
+      const ty = new Set(s.stations.map(function(x){ return x.t; }));
+      const usefulTypes = [...ty].filter(function(t){ return active.has(t); });
+      return Object.assign({}, s, { ty: ty, useful: usefulTypes,
+        score: usefulTypes.length * 10 - s.dist * 0.1 });
+    })
+    .filter(function(s){ return s.useful.length > 0; })
+    .sort(function(a,b){ return b.score - a.score; });
+
+  // Greedy: pick systems until all types are covered or no more systems
+  ranked.forEach(function(s) {
+    const uncovered = s.useful.filter(function(t){ return !covered.has(t); });
+    if (uncovered.length > 0) {
+      uncovered.forEach(function(t){ covered.add(t); });
+      route.push(Object.assign({}, s, { coveringTypes: uncovered }));
+    }
+  });
+
+  if (!route.length) return;
   document.getElementById('rw').style.display='block';
-  document.getElementById('rv').innerHTML = sc.map(function(s,i) {
-    const tags=[...s.ty].map(function(t){return '<span class="stag '+t+'">'+T[t]+'</span>';}).join('');
-    const best=[...s.ty].map(function(t){
-      const x=s.stations.filter(function(q){return q.t===t;}).sort(function(a,b){return (a.distance_to_arrival||99999)-(b.distance_to_arrival||99999);})[0];
-      return x?x.name:null;
-    }).filter(Boolean);
+  document.getElementById('rv').innerHTML = route.map(function(s,i) {
+    const tags = s.coveringTypes.map(function(t){
+      return '<span class="stag '+t+'">'+T[t]+'</span>';
+    }).join('');
+    // Best station = closest to arrival among the types this stop covers
+    const bestStation = s.stations
+      .filter(function(q){ return s.coveringTypes.indexOf(q.t) !== -1; })
+      .sort(function(a,b){ return (a.distance_to_arrival||99999)-(b.distance_to_arrival||99999); })[0];
     return '<div class="rstop">' +
       '<div class="snum">' + String(i+1).padStart(2,'0') + '</div>' +
       '<div class="sbody">' +
       '<div class="ssys">' + s.sys + '</div>' +
-      '<div class="sstn">' + (best[0]||'?') + (best.length>1?' (+'+(best.length-1)+' more)':'') + '</div>' +
+      '<div class="sstn">' + (bestStation ? bestStation.name : '?') + '</div>' +
       '<div class="stags">' + tags + '</div></div>' +
       '<div class="sdist">' + s.dist.toFixed(1) + ' ly</div></div>';
   }).join('');
